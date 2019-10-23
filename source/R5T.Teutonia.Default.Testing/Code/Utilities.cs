@@ -2,8 +2,10 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
+using R5T.Burgundy.Extensions;
 using R5T.Gepidia;
 using R5T.Gepidia.Local;
+using R5T.Gepidia.Remote;
 using R5T.Lombardy;
 
 using R5T.Teutonia.Default.Extensions;
@@ -19,9 +21,11 @@ namespace R5T.Teutonia.Default.Testing
         public static IServiceProvider GetServiceProvider()
         {
             var serviceProvider = new ServiceCollection()
+                .AddSingleton<RemoteFileSystemOperator>()
                 .AddSingleton<LocalFileSystemOperator>()
-                .AddSingleton<IStringlyTypedPathOperator, StringlyTypedPathOperator>()
+                .UseSftpClientWrapper()
                 .UseDefaultFileSystemCloningOperator()
+                .AddSingleton<IStringlyTypedPathOperator, StringlyTypedPathOperator>()
 
                 .BuildServiceProvider()
                 ;
@@ -60,7 +64,7 @@ namespace R5T.Teutonia.Default.Testing
         public static FileSystemSite GetRemoteDestinationSite(IServiceProvider serviceProvider)
         {
             var directoryPath = Constants.RemoteDestinationDirectoryPath;
-            var localFileSystemOperator = serviceProvider.GetRequiredService<>();
+            var localFileSystemOperator = serviceProvider.GetRequiredService<RemoteFileSystemOperator>();
 
             var output = Utilities.GetFileSystemSite(directoryPath, localFileSystemOperator, serviceProvider);
             return output;
