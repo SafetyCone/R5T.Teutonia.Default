@@ -5,6 +5,8 @@ using System.Linq;
 using R5T.Gepidia;
 using R5T.Lombardy;
 
+using R5T.Teutonia.Default.Extensions;
+
 
 namespace R5T.Teutonia.Default
 {
@@ -22,25 +24,27 @@ namespace R5T.Teutonia.Default
 
         public void Clone(FileSystemSite source, FileSystemSite destination, FileSystemCloningOptions options)
         {
-            var sourceDirectoryPath = this.StringlyTypedPathOperator.EnsureDirectoryPathIsDirectoryIndicated(source.DirectoryPath);
+            // Ensure the source and destination directories are directory indicated.
+            var ensuredSource = source.EnsureDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
+            var ensuredDestination = destination.EnsureDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
 
             // Get all source file-system entries.
-            var sourceFileSystemEntries = source.FileSystemOperator.EnumerateFileSystemEntries(sourceDirectoryPath);
+            var sourceFileSystemEntries = ensuredSource.FileSystemOperator.EnumerateFileSystemEntries(ensuredSource.DirectoryPath).ToList();
 
             // Get all destination file-system entries.
-            var destinationFileSystemEntries = destination.FileSystemOperator.EnumerateFileSystemEntries(destination.DirectoryPath);
+            var destinationFileSystemEntries = ensuredDestination.FileSystemOperator.EnumerateFileSystemEntries(ensuredDestination.DirectoryPath).ToList();
 
             // Create relative-path source and destination file-system entries.
             FileSystemEntry MakeRelativeEntry(string baseDirectoryPath, FileSystemEntry entry)
             {
-                var sourceBaseDirectoryRelativeEntryPath = this.StringlyTypedPathOperator.GetRelativePath(source.DirectoryPath, entry.Path);
+                var sourceBaseDirectoryRelativeEntryPath = this.StringlyTypedPathOperator.GetRelativePath(baseDirectoryPath, entry.Path);
 
                 var relativeEntry = FileSystemEntry.New(sourceBaseDirectoryRelativeEntryPath, entry.Type, entry.LastModifiedUTC);
                 return relativeEntry;
             }
 
-            var sourceBaseDirectoryRelativePathEntries = sourceFileSystemEntries.Select(entry => MakeRelativeEntry(source.DirectoryPath, entry));
-            var destinationBaseDirectoryRelativePathEntries = destinationFileSystemEntries.Select(entry => MakeRelativeEntry(source.DirectoryPath, entry));
+            var sourceBaseDirectoryRelativePathEntries = sourceFileSystemEntries.Select(entry => MakeRelativeEntry(ensuredSource.DirectoryPath, entry));
+            var destinationBaseDirectoryRelativePathEntries = destinationFileSystemEntries.Select(entry => MakeRelativeEntry(ensuredDestination.DirectoryPath, entry));
 
             // Get the file-system cloning difference.
             var difference = this.FileSystemCloningDifferencer.PerformDifference(sourceBaseDirectoryRelativePathEntries, destinationBaseDirectoryRelativePathEntries, options);
@@ -48,9 +52,18 @@ namespace R5T.Teutonia.Default
             // Create a list of operations, using absolute paths.
             var operations = new List<IFileSystemCloningOperation>();
 
+            // Special case: the destination directory does not exist. If so, make sure it is created first to allow files to be copied into it!
+            var destinationDirectoryExists = ensuredDestination.FileSystemOperator.ExistsDirectory(ensuredDestination.DirectoryPath);
+            if(!destinationDirectoryExists)
+            {
+                var createDestinationDirectoryOperation = new CreateDirectoryOperation(ensuredDestination.DirectoryPath);
+
+                operations.Add(createDestinationDirectoryOperation);
+            }
+
             foreach (var directoryToCreate in difference.RelativeDirectoryPathsToCreate)
             {
-                string destinationDirectoryToCreate = this.StringlyTypedPathOperator.Combine(destination.DirectoryPath, directoryToCreate);
+                string destinationDirectoryToCreate = this.StringlyTypedPathOperator.Combine(ensuredDestination.DirectoryPath, directoryToCreate);
 
                 var createDirectoryOperation = new CreateDirectoryOperation(destinationDirectoryToCreate);
 
@@ -59,7 +72,7 @@ namespace R5T.Teutonia.Default
 
             foreach (var directoryToDelete in difference.RelativeDirectoryPathsToDelete)
             {
-                string destinationDirectoryToDelete = this.StringlyTypedPathOperator.Combine(destination.DirectoryPath, directoryToDelete);
+                string destinationDirectoryToDelete = this.StringlyTypedPathOperator.Combine(ensuredDestination.DirectoryPath, directoryToDelete);
 
                 var deleteDirectoryOperation = new DeleteDirectoryOperation(destinationDirectoryToDelete);
 
@@ -68,8 +81,8 @@ namespace R5T.Teutonia.Default
 
             foreach (var fileToCopy in difference.RelativeFilePathsToCopy)
             {
-                string sourceFilePath = this.StringlyTypedPathOperator.Combine(source.DirectoryPath, fileToCopy);
-                string destinationFilePath = this.StringlyTypedPathOperator.Combine(destination.DirectoryPath, fileToCopy);
+                string sourceFilePath = this.StringlyTypedPathOperator.Combine(ensuredSource.DirectoryPath, fileToCopy);
+                string destinationFilePath = this.StringlyTypedPathOperator.Combine(ensuredDestination.DirectoryPath, fileToCopy);
 
                 var copyFileOperation = new CopyFileOperation(sourceFilePath, destinationFilePath);
 
@@ -78,8 +91,8 @@ namespace R5T.Teutonia.Default
 
             foreach (var fileToUpdate in difference.RelativeFilePathsToUpdate)
             {
-                string sourceFilePath = this.StringlyTypedPathOperator.Combine(source.DirectoryPath, fileToUpdate);
-                string destinationFilePath = this.StringlyTypedPathOperator.Combine(destination.DirectoryPath, fileToUpdate);
+                string sourceFilePath = this.StringlyTypedPathOperator.Combine(ensuredSource.DirectoryPath, fileToUpdate);
+                string destinationFilePath = this.StringlyTypedPathOperator.Combine(ensuredDestination.DirectoryPath, fileToUpdate);
 
                 var copyFileOperation = new CopyFileOperation(sourceFilePath, destinationFilePath);
 
@@ -88,7 +101,7 @@ namespace R5T.Teutonia.Default
 
             foreach (var fileToDelete in difference.RelativeFilePathsToDelete)
             {
-                string destinationFilePath = this.StringlyTypedPathOperator.Combine(destination.DirectoryPath, fileToDelete);
+                string destinationFilePath = this.StringlyTypedPathOperator.Combine(ensuredDestination.DirectoryPath, fileToDelete);
 
                 var deleteFileOperation = new DeleteFileOperation(destinationFilePath);
 
@@ -100,7 +113,7 @@ namespace R5T.Teutonia.Default
             // Execute the list of operations.
             foreach (var operation in operations)
             {
-                operation.Execute(source.FileSystemOperator, destination.FileSystemOperator);
+                operation.Execute(ensuredSource.FileSystemOperator, ensuredDestination.FileSystemOperator);
             }
         }
     }
