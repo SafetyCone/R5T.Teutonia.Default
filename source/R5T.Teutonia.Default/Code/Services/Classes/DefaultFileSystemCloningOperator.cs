@@ -29,10 +29,10 @@ namespace R5T.Teutonia.Default
             var ensuredDestination = destination.EnsureDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
 
             // Get all source file-system entries.
-            var sourceFileSystemEntries = ensuredSource.FileSystemOperator.EnumerateFileSystemEntries(ensuredSource.DirectoryPath).ToList();
+            var sourceFileSystemEntries = ensuredSource.FileSystemOperator.EnumerateFileSystemEntries(ensuredSource.DirectoryPath, true).ToList();
 
             // Get all destination file-system entries.
-            var destinationFileSystemEntries = ensuredDestination.FileSystemOperator.EnumerateFileSystemEntries(ensuredDestination.DirectoryPath).ToList();
+            var destinationFileSystemEntries = ensuredDestination.FileSystemOperator.EnumerateFileSystemEntries(ensuredDestination.DirectoryPath, true).ToList();
 
             // Create relative-path source and destination file-system entries.
             FileSystemEntry MakeRelativeEntry(string baseDirectoryPath, FileSystemEntry entry)
