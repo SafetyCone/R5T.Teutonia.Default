@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\R5T.Dacia\source\R5T.Dacia\R5T.Dacia.csproj" />
+    <ProjectReference Include="..\..\..\R5T.Gepidia.Local\source\R5T.Gepidia.Local\R5T.Gepidia.Local.csproj" />
+    <ProjectReference Include="..\..\..\R5T.Lombardy\source\R5T.Lombardy\R5T.Lombardy.csproj" />
+    <ProjectReference Include="..\..\..\R5T.Teutonia.Test\source\R5T.Teutonia.Test\R5T.Teutonia.Test.csproj" />
     <ProjectReference Include="..\R5T.Teutonia.Default\R5T.Teutonia.Default.csproj" />
   </ItemGroup>
 
