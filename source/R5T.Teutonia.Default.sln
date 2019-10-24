@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "R5T.Visigothia.Default.Loca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "R5T.Gepidia.Remote", "..\..\R5T.Gepidia.Remote\source\R5T.Gepidia.Remote\R5T.Gepidia.Remote.csproj", "{9FD1737E-651D-4375-AB55-B1ABFE8F25CF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "R5T.Gepidia.Lombardy", "..\..\R5T.Gepidia.Lombardy\source\R5T.Gepidia.Lombardy\R5T.Gepidia.Lombardy.csproj", "{3CB208F4-A196-4366-AD10-5CC85006977D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -519,6 +521,18 @@ Global
 		{9FD1737E-651D-4375-AB55-B1ABFE8F25CF}.Release|x64.Build.0 = Release|Any CPU
 		{9FD1737E-651D-4375-AB55-B1ABFE8F25CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{9FD1737E-651D-4375-AB55-B1ABFE8F25CF}.Release|x86.Build.0 = Release|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Debug|x64.Build.0 = Debug|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Debug|x86.Build.0 = Debug|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Release|x64.ActiveCfg = Release|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Release|x64.Build.0 = Release|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Release|x86.ActiveCfg = Release|Any CPU
+		{3CB208F4-A196-4366-AD10-5CC85006977D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -557,6 +571,7 @@ Global
 		{661A0B95-767C-4381-B274-A7EE23DD2F07} = {9A89A450-F17B-4CA5-A216-FFA77B0B7658}
 		{260ABEAA-EA80-46E0-A127-4059E4184D92} = {9A89A450-F17B-4CA5-A216-FFA77B0B7658}
 		{9FD1737E-651D-4375-AB55-B1ABFE8F25CF} = {9A89A450-F17B-4CA5-A216-FFA77B0B7658}
+		{3CB208F4-A196-4366-AD10-5CC85006977D} = {9A89A450-F17B-4CA5-A216-FFA77B0B7658}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94703F0C-8E8D-4BC3-93D7-DEDFACE79E86}
