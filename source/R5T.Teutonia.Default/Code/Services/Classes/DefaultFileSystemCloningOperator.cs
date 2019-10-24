@@ -25,8 +25,8 @@ namespace R5T.Teutonia.Default
         public void Clone(FileSystemSite source, FileSystemSite destination, FileSystemCloningOptions options)
         {
             // Ensure the source and destination directories are directory indicated.
-            var ensuredSource = source.EnsureDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
-            var ensuredDestination = destination.EnsureDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
+            var ensuredSource = source.EnsureSiteDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
+            var ensuredDestination = destination.EnsureSiteDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
 
             // Get all source file-system entries.
             var sourceFileSystemEntries = ensuredSource.FileSystemOperator.EnumerateFileSystemEntries(ensuredSource.DirectoryPath, true).ToList();
