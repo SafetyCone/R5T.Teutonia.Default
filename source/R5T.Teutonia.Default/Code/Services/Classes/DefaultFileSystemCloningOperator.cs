@@ -5,7 +5,7 @@ using System.Linq;
 using R5T.Gepidia;
 using R5T.Lombardy;
 
-using R5T.Teutonia.Default.Extensions;
+using R5T.Gepidia.Lombardy.Extensions;
 
 
 namespace R5T.Teutonia.Default
