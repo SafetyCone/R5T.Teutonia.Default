@@ -29,10 +29,12 @@ namespace R5T.Teutonia.Default
             var ensuredDestination = destination.EnsureSiteDirectoryPathIsDirectoryIndicated(this.StringlyTypedPathOperator);
 
             // Get all source file-system entries.
-            var sourceFileSystemEntries = ensuredSource.FileSystemOperator.EnumerateFileSystemEntries(ensuredSource.DirectoryPath, true).ToList();
+            var sourceFileSystemEntries = ensuredSource.FileSystemOperator.EnumerateFileSystemEntries(ensuredSource.DirectoryPath, true)
+                .ToList();
 
             // Get all destination file-system entries.
-            var destinationFileSystemEntries = ensuredDestination.FileSystemOperator.EnumerateFileSystemEntries(ensuredDestination.DirectoryPath, true).ToList();
+            var destinationFileSystemEntries = ensuredDestination.FileSystemOperator.EnumerateFileSystemEntries(ensuredDestination.DirectoryPath, true)
+                .ToList();
 
             // Create relative-path source and destination file-system entries.
             FileSystemEntry MakeRelativeEntry(string baseDirectoryPath, FileSystemEntry entry)
@@ -43,8 +45,23 @@ namespace R5T.Teutonia.Default
                 return relativeEntry;
             }
 
-            var sourceBaseDirectoryRelativePathEntries = sourceFileSystemEntries.Select(entry => MakeRelativeEntry(ensuredSource.DirectoryPath, entry));
-            var destinationBaseDirectoryRelativePathEntries = destinationFileSystemEntries.Select(entry => MakeRelativeEntry(ensuredDestination.DirectoryPath, entry));
+            var sourceBaseDirectoryRelativePathEntries = sourceFileSystemEntries.Select(entry => MakeRelativeEntry(ensuredSource.DirectoryPath, entry))
+                .Select(fileSystemEntry =>
+                {
+                    // Make sure we are using a common path format.
+                    var standardPathFileSystemEntry = fileSystemEntry.GetStandardPathFormatEntry(this.StringlyTypedPathOperator);
+                    return standardPathFileSystemEntry;
+                })
+                .ToList();
+
+            var destinationBaseDirectoryRelativePathEntries = destinationFileSystemEntries.Select(entry => MakeRelativeEntry(ensuredDestination.DirectoryPath, entry))
+                .Select(fileSystemEntry =>
+                {
+                    // Make sure we are using a common path format.
+                    var standardPathFileSystemEntry = fileSystemEntry.GetStandardPathFormatEntry(this.StringlyTypedPathOperator);
+                    return standardPathFileSystemEntry;
+                })
+                .ToList();
 
             // Get the file-system cloning difference.
             var difference = this.FileSystemCloningDifferencer.PerformDifference(sourceBaseDirectoryRelativePathEntries, destinationBaseDirectoryRelativePathEntries, options);
