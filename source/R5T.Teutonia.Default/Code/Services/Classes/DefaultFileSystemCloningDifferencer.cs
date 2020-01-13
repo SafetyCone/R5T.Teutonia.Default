@@ -52,9 +52,9 @@ namespace R5T.Teutonia.Default
 
             // Copy all files that exist in both the source and the destination, but the last modified date in the source is greater than the last modified date in the destination.
             var filesToUpdate = sourceFileEntries
-                .Join(destinationFileEntries, source => source.Path, destination => destination.Path, (source, destination) => Tuple.Create(source, destination))
-                .Where(x => x.Item1.LastModifiedUTC > x.Item2.LastModifiedUTC)
-                .Select(x => x.Item1);
+                .Join(destinationFileEntries, source => source.Path, destination => destination.Path, (source, destination) => (Destination: destination, Source: source))
+                .Where(x => x.Destination.LastModifiedUTC < x.Source.LastModifiedUTC)
+                .Select(x => x.Source);
 
             difference.RelativeFilePathsToUpdate.AddRange(filesToUpdate.Select(x => x.Path));
 
