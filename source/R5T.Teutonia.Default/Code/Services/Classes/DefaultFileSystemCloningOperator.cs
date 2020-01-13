@@ -63,6 +63,8 @@ namespace R5T.Teutonia.Default
                 })
                 .ToList();
 
+            // Write out source and destination data.
+
             // Get the file-system cloning difference.
             var difference = this.FileSystemCloningDifferencer.PerformDifference(sourceBaseDirectoryRelativePathEntries, destinationBaseDirectoryRelativePathEntries, options);
 
