@@ -6,7 +6,7 @@ using R5T.Dacia;
 using R5T.Lombardy;
 
 
-namespace R5T.Teutonia.Default.Extensions
+namespace R5T.Teutonia.Default
 {
     public static class IServiceCollectionExtensions
     {
