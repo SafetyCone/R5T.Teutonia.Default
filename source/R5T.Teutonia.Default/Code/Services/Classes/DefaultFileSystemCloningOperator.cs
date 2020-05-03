@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using R5T.Gepidia;
 using R5T.Lombardy;
@@ -134,6 +136,11 @@ namespace R5T.Teutonia.Default
             {
                 operation.Execute(ensuredSource.FileSystemOperator, ensuredDestination.FileSystemOperator);
             }
+        }
+
+        public Task CloneAsync(FileSystemSite source, FileSystemSite destination, FileSystemCloningOptions options, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
