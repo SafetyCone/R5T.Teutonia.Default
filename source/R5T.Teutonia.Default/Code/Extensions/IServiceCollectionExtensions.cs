@@ -2,13 +2,14 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using R5T.Dacia;
 using R5T.Lombardy;
+
+using R5T.T0063;
 
 
 namespace R5T.Teutonia.Default
 {
-    public static class IServiceCollectionExtensions
+    public static partial class IServiceCollectionExtensions
     {
         /// <summary>
         /// Adds the <see cref="DefaultFileSystemCloningDifferencer"/> implementation of <see cref="IFileSystemCloningDifferencer"/> as a <see cref="ServiceLifetime.Singleton"/>.
@@ -21,41 +22,19 @@ namespace R5T.Teutonia.Default
         }
 
         /// <summary>
-        /// Adds the <see cref="DefaultFileSystemCloningDifferencer"/> implementation of <see cref="IFileSystemCloningDifferencer"/> as a <see cref="ServiceLifetime.Singleton"/>.
-        /// </summary>
-        public static ServiceAction<IFileSystemCloningDifferencer> AddDefaultFileSystemCloningDifferencerAction(this IServiceCollection services)
-        {
-            var serviceAction = new ServiceAction<IFileSystemCloningDifferencer>(() => services.AddDefaultFileSystemCloningDifferencer());
-            return serviceAction;
-        }
-
-        /// <summary>
         /// Adds the <see cref="DefaultFileSystemCloningOperator"/> implementation of <see cref="IFileSystemCloningOperator"/> as a <see cref="ServiceLifetime.Singleton"/>.
         /// </summary>
         public static IServiceCollection AddDefaultFileSystemCloningOperator(this IServiceCollection services,
-            ServiceAction<IFileSystemCloningDifferencer> addFileSystemCloningDifferencer,
-            ServiceAction<IStringlyTypedPathOperator> addStringlyTypedPathOperator)
+            IServiceAction<IFileSystemCloningDifferencer> fileSystemCloningDifferencerAction,
+            IServiceAction<IStringlyTypedPathOperator> stringlyTypedPathOperatorAction)
         {
             services
+                .Run(fileSystemCloningDifferencerAction)
+                .Run(stringlyTypedPathOperatorAction)
                 .AddSingleton<IFileSystemCloningOperator, DefaultFileSystemCloningOperator>()
-                .RunServiceAction(addFileSystemCloningDifferencer)
-                .RunServiceAction(addStringlyTypedPathOperator)
                 ;
 
             return services;
-        }
-
-        /// <summary>
-        /// Adds the <see cref="DefaultFileSystemCloningOperator"/> implementation of <see cref="IFileSystemCloningOperator"/> as a <see cref="ServiceLifetime.Singleton"/>.
-        /// </summary>
-        public static ServiceAction<IFileSystemCloningOperator> AddDefaultFileSystemCloningOperatorAction(this IServiceCollection services,
-            ServiceAction<IFileSystemCloningDifferencer> addFileSystemCloningDifferencer,
-            ServiceAction<IStringlyTypedPathOperator> addStringlyTypedPathOperator)
-        {
-            var serviceAction = new ServiceAction<IFileSystemCloningOperator>(() => services.AddDefaultFileSystemCloningOperator(
-                addFileSystemCloningDifferencer,
-                addStringlyTypedPathOperator));
-            return serviceAction;
         }
     }
 }

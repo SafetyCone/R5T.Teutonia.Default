@@ -8,8 +8,6 @@ using R5T.Gepidia.Local;
 using R5T.Gepidia.Remote;
 using R5T.Lombardy;
 
-using R5T.Teutonia.Default.Extensions;
-
 
 namespace R5T.Teutonia.Default.Testing
 {
@@ -23,8 +21,9 @@ namespace R5T.Teutonia.Default.Testing
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<RemoteFileSystemOperator>()
                 .AddSingleton<LocalFileSystemOperator>()
-                .UseSftpClientWrapper()
-                .UseDefaultFileSystemCloningOperator()
+                .UseSftpClientWrapper_Old()
+                // TODO: fix.
+                //.AddDefaultFileSystemCloningOperator_Old()
                 .AddSingleton<IStringlyTypedPathOperator, StringlyTypedPathOperator>()
 
                 .BuildServiceProvider()
